@@ -8,6 +8,7 @@
         <version>4.0.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    <packaging>pom</packaging>
     <groupId>es.iesclaradelrey.da2d1a.tienda-drm-jcgt</groupId>
     <artifactId>tienda-drm-jcgt-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
