@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
  * los métodos getter, setter, equals, hashCode, toString y constructores.
  * </p>
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Data //Genera automáticamente setters y getters, toString, equals y RequiredArgsConstructor
+@NoArgsConstructor //Es necesario para que Hibernate funcione correctamente
+@AllArgsConstructor //Genera un constructor con todos los atributos
 public class Categoria {
 
     /**
