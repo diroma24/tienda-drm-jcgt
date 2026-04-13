@@ -1,0 +1,26 @@
+/* src/main/resources/static/css/estilos.css */
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.hero-section {
+    background: linear-gradient(90deg, #2E8B57 0%, #4682B4 100%);
+    color: white;
+    padding: 60px 0;
+}
+
+.btn-mud-tree {
+    background-color: #2E8B57;
+    color: white;
+    border: 2px solid #4682B4;
+    transition: 0.3s;
+}
+
+.btn-mud-tree:hover {
+    background-color: #4682B4;
+    border-color: #2E8B57;
+    color: white;
+}
+
+.navbar-brand span.mud { color: #7cfc00; }
+.navbar-brand span.tree { color: #00bfff; }
