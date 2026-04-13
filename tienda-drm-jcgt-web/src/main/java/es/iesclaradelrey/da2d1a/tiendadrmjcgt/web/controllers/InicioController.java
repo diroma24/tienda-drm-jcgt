@@ -8,6 +8,7 @@ public class InicioController {
 
     @GetMapping("/")
     public String index() {
-        return "redirect:/index.html";
+        return "home"; //Se ha cambiado el nombre del index a home.html para que este sea dinámico
+        //Por defecto SpringBoot busca un archivo llamado index.html en static, si está da error
     }
 }

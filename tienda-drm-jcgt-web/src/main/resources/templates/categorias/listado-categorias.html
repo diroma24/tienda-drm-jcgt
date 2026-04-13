@@ -16,28 +16,19 @@
         <a class="navbar-brand fw-bold" th:href="@{/}">
             <span style="color: #7cfc00;">Mud</span> & <span style="color: #00bfff;">Tree</span> TCG
         </a>
-
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/}">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/categorias}">Categorías</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-outline-light ms-lg-3" href="#">Carrito (0)</a>
-                </li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/categorias}">Categorías</a></li>
+                <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3" href="#">Carrito (0)</a></li>
             </ul>
         </div>
     </div>
 </nav>
-
 <header class="bg-light py-5 mb-5 border-bottom">
     <div class="container text-center">
         <h1 class="display-4 fw-bold">Nuestras Categorías</h1>
@@ -58,7 +49,7 @@
                      style="height: 200px; object-fit: contain;">
 
                 <img th:unless="${cat.imagen != null}"
-                     th:src="@{'/imagenes/categorias/no-image.png'}"
+                     th:src="@{'/imagenes/categorias/image_not_found.jpg'}"
                      class="card-img-top p-3"
                      alt="Imagen no disponible"
                      style="height: 200px; object-fit: contain;">
