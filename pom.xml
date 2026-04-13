@@ -9,6 +9,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <packaging>pom</packaging>
+    <modules>
+        <module>tienda-drm-jcgt-common</module>
+        <module>tienda-drm-jcgt-common</module>
+        <module>tienda-drm-jcgt-web</module>
+    </modules>
     <groupId>es.iesclaradelrey.da2d1a.tienda-drm-jcgt</groupId>
     <artifactId>tienda-drm-jcgt-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>

@@ -60,6 +60,23 @@
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Dependencias añadidas por nosotros -->
+        <!-- Versiones de dependencias gestionadas automáticamente por IntelliJ para que
+         no den errores-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>es.iesclaradelrey.da2d1a.tienda-drm-jcgt</groupId>
+            <artifactId>tienda-drm-jcgt-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>
