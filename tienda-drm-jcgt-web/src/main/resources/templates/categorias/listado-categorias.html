@@ -58,7 +58,7 @@
                     <h5 class="card-title fw-bold" th:text="${cat.nombre}">Nombre</h5>
                     <p class="card-text text-muted small" th:text="${cat.descripcion}">Descripción</p>
 
-                    <a href="#" class="btn btn-mud-tree mt-auto">Explorar</a>
+                    <a th:href="@{/categorias/{id}(id=${cat.id})}" class="btn btn-mud-tree mt-auto">Explorar</a>
                 </div>
             </div>
         </div>
