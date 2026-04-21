@@ -27,19 +27,19 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // 1. Categoría con imagen (Sobres)
-        categoriaService.add(new Categoria(1L, "Sobres",
+        categoriaService.add(new Categoria(null, "Sobres",
                 "Ampliaciones de las últimas ediciones como Escarlata y Púrpura.", "sobres.jpg"));
 
         // 2. Categoría con imagen (Mazos)
-        categoriaService.add(new Categoria(2L, "Mazos",
+        categoriaService.add(new Categoria(null, "Mazos",
                 "Mazos listos para jugar, ideales para entrenadores principiantes.", null));
 
         // 3. Categoría con imagen (Accesorios)
-        categoriaService.add(new Categoria(3L, "Accesorios",
+        categoriaService.add(new Categoria(null, "Accesorios",
                 "Protege tus cartas con las mejores fundas y cajas de almacenamiento.", "accesorios.jpg"));
 
         // 4. Categoría SIN imagen (Cartas Sueltas)
-        categoriaService.add(new Categoria(4L, "Cartas",
+        categoriaService.add(new Categoria(null, "Cartas",
                 "Cartas raras, Full Art y Secretas vendidas por separado.", "cartas.jpg"));
 
         System.out.println("Categorías de Pokémon TCG cargadas con éxito.");

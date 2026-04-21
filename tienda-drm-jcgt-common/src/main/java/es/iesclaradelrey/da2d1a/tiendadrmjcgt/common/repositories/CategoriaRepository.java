@@ -1,16 +1,12 @@
 package es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.repositories;
 
 import es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.entities.Categoria;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * Interfaz de repositorio especializada para la gestión de entidades {@link Categoria}.
- * <p>
- * Hereda todas las operaciones estándar de {@link Repository} y actúa como el
- * contrato oficial para el acceso a datos relacionados con las categorías del sistema.
- * </p>
- * * @see Categoria
- * @see Repository
+ * Interfaz de repositorio especializada para la gestión de entidades {@link Categoria} mediante JPA.
+ * Hereda operaciones CRUD estándar (save, findAll, findById, etc.) de {@link JpaRepository}.
  */
-public interface CategoriaRepository extends Repository<Categoria, Long> {
+public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     // Métodos específicos
 }

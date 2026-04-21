@@ -1,5 +1,6 @@
 package es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.entities;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,29 +12,37 @@ import lombok.NoArgsConstructor;
  * los métodos getter, setter, equals, hashCode, toString y constructores.
  * </p>
  */
+
+@Entity // Indica que esta clase se mapea a una tabla de base de datos
+@Table(name = "categorias") // Nombre de la tabla en H2
 @Data //Genera automáticamente setters y getters, toString, equals y RequiredArgsConstructor
 @NoArgsConstructor //Es necesario para que Hibernate funcione correctamente
 @AllArgsConstructor //Genera un constructor con todos los atributos
 public class Categoria {
 
     /**
-     * Identificador único de la categoría.
-     * Vinculado a la llave primaria en la base de datos.
+     * Identificador único.
+     * GenerationType.IDENTITY hace que sea 'identity' en la base de datos.
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * Nombre descriptivo de la categoría (ej. "Sobres", "Cartas").
+     * Nombre: obligatorio (nullable=false), único y máx 100 caracteres.
      */
+    @Column(nullable = false, unique = true, length = 100)
     private String nombre;
 
     /**
-     * Descripción sobre qué tipo de elementos contiene esta categoría.
+     * Descripción: máximo 2000 caracteres.
      */
+    @Column(length = 2000)
     private String descripcion;
 
     /**
-     * Nombre del archivo de imagen de la categoría.
+     * Imagen: máximo 500 caracteres.
      */
+    @Column(length = 500)
     private String imagen;
 }
