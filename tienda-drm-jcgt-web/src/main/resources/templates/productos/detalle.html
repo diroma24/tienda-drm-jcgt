@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${p.nombre} + ' - Detalle'"></title>
+    <style>
+        .container { max-width: 900px; margin: 20px auto; font-family: sans-serif; }
+        .flex-container { display: flex; gap: 30px; margin-top: 20px; }
+        .col-izq { flex: 1; position: relative; }
+        .col-der { flex: 1; }
+        .img-detalle { width: 100%; border-radius: 10px; border: 1px solid #ddd; }
+        .badge-promo { position: absolute; top: 15px; left: 15px; background: #e74c3c; color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold; }
+        .precio-tachado { text-decoration: line-through; color: #999; font-size: 1.2em; }
+        .precio-final { font-size: 2.5em; color: #2ecc71; font-weight: bold; display: block; }
+        .ean-box { background: #f8f9fa; padding: 10px; border-left: 4px solid #3498db; margin: 15px 0; }
+        .desc { line-height: 1.6; color: #444; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a th:href="@{/productos}">← Volver al catálogo</a>
+
+    <div class="flex-container">
+        <div class="col-izq">
+            <div th:if="${p.descuento > 0}" class="badge-promo" th:text="${'-' + p.descuento + '%'}"></div>
+
+            <img th:if="${p.imagen != null && !p.imagen.isEmpty()}"
+                 th:src="@{${p.imagen}}"
+                 th:alt="${'Imagen de ' + p.nombre}"
+                 class="img-detalle">
+
+            <img th:unless="${p.imagen != null && !p.imagen.isEmpty()}"
+                 th:src="@{/imagenes/image_not_found.jpg}"
+                 alt=""
+                 class="img-detalle">
+        </div>
+
+        <div class="col-der">
+            <h1 th:text="${p.nombre}">Nombre del Producto</h1>
+            <p th:if="${p.marca != null}" th:text="'Marca: ' + ${p.marca}" style="color: #666;"></p>
+
+            <div class="ean-box">
+                <strong>Código EAN-13:</strong> <span th:text="${p.codigoEan}"></span>
+            </div>
+
+            <div class="precios">
+                <span th:if="${p.descuento > 0}" class="precio-tachado" th:text="${p.precio + '€'}"></span>
+                <span class="precio-final"
+                      th:text="${#numbers.formatDecimal(p.descuento > 0 ? (p.precio * (1 - p.descuento/100.0)) : p.precio, 1, 2) + '€'}">
+                    </span>
+            </div>
+
+            <h3>Descripción</h3>
+            <p class="desc" th:text="${p.descripcion}"></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
