@@ -1,59 +1,71 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${p.nombre} + ' - Detalle'"></title>
-    <style>
-        .container { max-width: 900px; margin: 20px auto; font-family: sans-serif; }
-        .flex-container { display: flex; gap: 30px; margin-top: 20px; }
-        .col-izq { flex: 1; position: relative; }
-        .col-der { flex: 1; }
-        .img-detalle { width: 100%; border-radius: 10px; border: 1px solid #ddd; }
-        .badge-promo { position: absolute; top: 15px; left: 15px; background: #e74c3c; color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold; }
-        .precio-tachado { text-decoration: line-through; color: #999; font-size: 1.2em; }
-        .precio-final { font-size: 2.5em; color: #2ecc71; font-weight: bold; display: block; }
-        .ean-box { background: #f8f9fa; padding: 10px; border-left: 4px solid #3498db; margin: 15px 0; }
-        .desc { line-height: 1.6; color: #444; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <a th:href="@{/productos}">← Volver al catálogo</a>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 
-    <div class="flex-container">
-        <div class="col-izq">
-            <div th:if="${p.descuento > 0}" class="badge-promo" th:text="${'-' + p.descuento + '%'}"></div>
+<head th:replace="~{layout/base :: head(titulo=${p.nombre})}"></head>
 
-            <img th:if="${p.imagen != null && !p.imagen.isEmpty()}"
-                 th:src="@{${p.imagen}}"
-                 th:alt="${'Imagen de ' + p.nombre}"
-                 class="img-detalle">
+<body class="d-flex flex-column h-100">
 
-            <img th:unless="${p.imagen != null && !p.imagen.isEmpty()}"
-                 th:src="@{/imagenes/image_not_found.jpg}"
-                 alt=""
-                 class="img-detalle">
-        </div>
+<nav th:replace="~{layout/base :: navbar}"></nav>
 
-        <div class="col-der">
-            <h1 th:text="${p.nombre}">Nombre del Producto</h1>
-            <p th:if="${p.marca != null}" th:text="'Marca: ' + ${p.marca}" style="color: #666;"></p>
+<main class="container my-5">
+    <div class="card shadow-sm border-0 p-4">
+        <div class="row">
+            <div class="col-md-6 position-relative">
+                <div th:if="${p.descuento > 0}"
+                     class="badge bg-danger position-absolute top-0 start-0 m-3 p-2"
+                     th:text="${'-' + p.descuento + '%'}"></div>
 
-            <div class="ean-box">
-                <strong>Código EAN-13:</strong> <span th:text="${p.codigoEan}"></span>
+                <img th:if="${p.imagen != null && !p.imagen.isEmpty()}"
+                     th:src="@{${p.imagen}}"
+                     th:alt="${'Imagen de ' + p.nombre}"
+                     class="img-fluid rounded shadow-sm">
+
+                <img th:unless="${p.imagen != null && !p.imagen.isEmpty()}"
+                     th:src="@{/imagenes/image_not_found.jpg}"
+                     class="img-fluid rounded shadow-sm"
+                     alt="Imagen no disponible">
             </div>
 
-            <div class="precios">
-                <span th:if="${p.descuento > 0}" class="precio-tachado" th:text="${p.precio + '€'}"></span>
-                <span class="precio-final"
-                      th:text="${#numbers.formatDecimal(p.descuento > 0 ? (p.precio * (1 - p.descuento/100.0)) : p.precio, 1, 2) + '€'}">
-                    </span>
-            </div>
+            <div class="col-md-6">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/productos}">Productos</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="${p.nombre}"></li>
+                    </ol>
+                </nav>
 
-            <h3>Descripción</h3>
-            <p class="desc" th:text="${p.descripcion}"></p>
+                <h1 class="display-5 fw-bold" th:text="${p.nombre}">Nombre</h1>
+                <p class="text-primary h4" th:if="${p.marca != null}" th:text="${p.marca}"></p>
+
+                <div class="bg-light p-3 my-4 border-start border-4 border-info">
+                    <strong>Código EAN-13:</strong>
+                    <code class="h5 ms-2" th:text="${p.codigoEan}"></code>
+                </div>
+
+                <div class="mb-4">
+                        <span th:if="${p.descuento > 0}"
+                              class="text-muted text-decoration-line-through h4 me-3"
+                              th:text="${#numbers.formatDecimal(p.precio, 1, 2) + '€'}"></span>
+                    <span class="text-dark display-6 fw-bold"
+                          th:text="${#numbers.formatDecimal(p.descuento > 0 ? (p.precio * (1 - p.descuento/100.0)) : p.precio, 1, 2) + '€'}">
+                        </span>
+                </div>
+
+                <hr>
+
+                <h3>Descripción Completa</h3>
+                <p class="lead" style="white-space: pre-line;" th:text="${p.descripcion}"></p>
+
+                <div class="d-grid gap-2 mt-5">
+                    <button class="btn btn-dark btn-lg" type="button">Añadir al carrito</button>
+                    <a th:href="@{/productos}" class="btn btn-outline-secondary">Volver al catálogo</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</main>
+
+<footer th:replace="~{layout/base :: footer}"></footer>
+
 </body>
 </html>
