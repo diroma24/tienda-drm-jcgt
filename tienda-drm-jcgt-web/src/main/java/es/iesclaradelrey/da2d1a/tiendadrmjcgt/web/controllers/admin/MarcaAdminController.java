@@ -6,6 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/marcas")
 public class MarcaAdminController {
@@ -31,12 +34,29 @@ public class MarcaAdminController {
     @PostMapping("/nuevo")
     public String guardar(@ModelAttribute Marca marca, Model model) {
         try {
+            List<String> errores = new ArrayList<>();
+
+            // Validación de Nombre
+            if (marca.getNombre() == null || marca.getNombre().isBlank()) {
+                errores.add("El nombre de la marca no puede estar vacío.");
+            }
+
+            // Validación de Descripción (Opcional pero controlada)
+            if (marca.getDescripcion() != null && marca.getDescripcion().length() > 500) {
+                errores.add("La descripción es demasiado larga (máximo 500 caracteres).");
+            }
+
+            if (!errores.isEmpty()) {
+                throw new IllegalArgumentException(String.join("|", errores));
+            }
+
             marcaService.save(marca);
             return "redirect:/admin/marcas";
+
         } catch (Exception e) {
-            model.addAttribute("error", "No se pudo crear la marca: " + e.getMessage());
-            // El objeto 'marca' se mantiene automáticamente para no perder lo escrito
-            return "admin/marcas/formulario";
+            model.addAttribute("mensajeError", e.getMessage());
+            model.addAttribute("volverUrl", "/admin/marcas/nuevo");
+            return "admin/error-validacion";
         }
     }
 }
