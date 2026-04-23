@@ -7,30 +7,26 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * Clase de configuración para Spring Web MVC.
  * <p>
- * Implementa {@link WebMvcConfigurer} para permitir la personalización de la configuración
- * predeterminada de Spring MVC. Se utiliza principalmente para definir configuraciones
- * transversales de la capa web, como el mapeo directo de URLs a vistas sin necesidad de
- * crear clases controladoras ({@code @Controller}) explícitas.
+ * Implementa {@link WebMvcConfigurer} para personalizar la configuración
+ * de la capa web. Permite definir mapeos directos de URLs a vistas sin
+ * requerir controladores explícitos para contenido estático o simple.
  * </p>
  */
-@Configuration
+@Configuration // Indica que la clase contiene definiciones de beans y configuración de Spring
 public class WebConfiguration implements WebMvcConfigurer {
 
     /**
-     * Registra controladores de vista simples automatizados.
+     * Registra controladores de vista simplificados en el sistema.
      * <p>
-     * Este método se utiliza para definir mapeos directos entre una URL solicitada por
-     * el cliente y el nombre de una vista (por ejemplo, una plantilla Thymeleaf o un archivo HTML)
-     * que debe ser renderizada. En esta configuración, se enlaza la ruta {@code /condiciones}
-     * con la vista {@code condiciones}.
+     * Establece una relación directa entre rutas URL y nombres de plantillas,
+     * optimizando la gestión de páginas que no requieren lógica de negocio previa.
      * </p>
      *
-     * @param registry el registro ({@link ViewControllerRegistry}) proporcionado por el contexto
-     * de Spring donde se configuran y almacenan los mapeos de los controladores de vistas.
+     * @param registry Registro de controladores de vista para añadir los mapeos.
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        // se mapeamos la URL /condiciones directamente al archivo condiciones.html
+        // Enlaza la ruta de navegación con el nombre físico de la plantilla correspondiente
         registry.addViewController("/condiciones").setViewName("condiciones");
     }
 }

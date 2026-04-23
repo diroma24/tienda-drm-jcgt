@@ -14,36 +14,53 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Controlador para la parte pública de categorías.
+ * Controlador para la gestión de la navegación pública por categorías.
+ * <p>
+ * Se encarga de exponer los datos de las categorías y sus productos asociados
+ * a los usuarios finales de la tienda.
+ * </p>
  */
-@Controller
-@RequestMapping("/categorias")
+@Controller // Define la clase como un controlador de Spring MVC
+@RequestMapping("/categorias") // Establece el prefijo de ruta para todas las peticiones del controlador
 public class CategoriaController {
 
     private final CategoriaService categoriaService;
 
+    /**
+     * Constructor para la inyección del servicio de categorías.
+     */
     public CategoriaController(CategoriaService categoriaService) {
         this.categoriaService = categoriaService;
     }
 
+    /**
+     * Recupera y muestra el catálogo completo de categorías disponibles.
+     * Envía la colección de categorías a la vista de listado público.
+     * * @param model Objeto de Spring para el paso de datos a la vista.
+     * @return Nombre de la plantilla para el listado de categorías.
+     */
     @GetMapping({"", "/"})
     public String listado(Model model) {
-        // CORRECCIÓN: Cambiado getAll() por findAll() para coincidir con la nueva interfaz
         model.addAttribute("listaCategorias", categoriaService.findAll());
-        return "categorias/listado-categorias";
+        return "categorias/listado";
     }
 
+    /**
+     * Muestra el detalle de una categoría específica y sus productos relacionados.
+     * Los productos se presentan ordenados alfabéticamente de forma insensible a mayúsculas.
+     * * @param id Identificador único de la categoría.
+     * @param model Objeto de Spring para el paso de datos a la vista.
+     * @return Nombre de la plantilla de detalle o redirección si la categoría no existe.
+     */
     @GetMapping("/{id}")
     public String detalle(@PathVariable Long id, Model model) {
-        // CORRECCIÓN: Cambiado getById(id).orElse(null) por findById(id)
-        // ya que ahora nuestro service devuelve directamente el objeto o null
         Categoria categoria = categoriaService.findById(id);
 
         if (categoria == null) {
             return "redirect:/categorias";
         }
 
-        // Obtener productos y ordenar
+        // Procesa la colección de productos para aplicar el criterio de ordenación nominal
         List<Producto> productosOrdenados = new ArrayList<>(categoria.getProductos());
         productosOrdenados.sort(Comparator.comparing(Producto::getNombre, String.CASE_INSENSITIVE_ORDER));
 
