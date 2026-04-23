@@ -35,7 +35,31 @@
                 </nav>
 
                 <h1 class="display-5 fw-bold" th:text="${p.nombre}">Nombre</h1>
-                <p class="text-primary h4" th:if="${p.marca != null}" th:text="${p.marca}"></p>
+                <div class="mb-3">
+                    <h6 class="text-uppercase small fw-bold text-muted">Fabricante:</h6>
+                    <a th:href="@{/marcas/{id}(id=${p.marca.id})}"
+                       class="btn btn-outline-dark btn-sm">
+                        <span th:text="${p.marca.nombre}">Nombre de la Marca</span>
+                    </a>
+                </div>
+
+                <div th:if="${not #lists.isEmpty(p.categorias)}" class="mt-4">
+                    <h6 class="text-uppercase small fw-bold text-muted">Categorías:</h6>
+
+                    <p th:if="${#lists.size(p.categorias) == 1}">
+                        <a th:href="@{/categorias/{id}(id=${p.categorias[0].id})}"
+                           th:text="${p.categorias[0].nombre}"
+                           class="badge bg-info text-dark text-decoration-none"></a>
+                    </p>
+
+                    <ul th:if="${#lists.size(p.categorias) > 1}" class="list-inline">
+                        <li th:each="cat : ${p.categorias}" class="list-inline-item">
+                            <a th:href="@{/categorias/{id}(id=${cat.id})}"
+                               th:text="${cat.nombre}"
+                               class="badge bg-info text-dark text-decoration-none"></a>
+                        </li>
+                    </ul>
+                </div>
 
                 <div class="bg-light p-3 my-4 border-start border-4 border-info">
                     <strong>Código EAN-13:</strong>

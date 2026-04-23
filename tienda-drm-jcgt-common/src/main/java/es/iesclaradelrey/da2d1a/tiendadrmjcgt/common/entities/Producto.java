@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * Entidad que representa un producto de la tienda.
  */
@@ -35,32 +37,40 @@ public class Producto {
     private String nombre;
 
     /**
-     * 4) Marca del producto. Opcional. Máximo 50 caracteres
-     */
-    @Column(length = 50)
-    private String marca;
-
-    /**
-     * 5) Descripción del producto. Obligatoria. Máximo 4000 caracteres
+     * 4) Descripción del producto. Obligatoria. Máximo 4000 caracteres
      */
     @Column(nullable = false, length = 4000)
     private String descripcion;
 
     /**
-     * 6) URL de la imagen relativa a la raíz. Opcional. Máximo 500 caracteres
+     * 5) URL de la imagen relativa a la raíz. Opcional. Máximo 500 caracteres
      */
     @Column(length = 500)
     private String imagen;
 
     /**
-     * 7) Precio del producto. Obligatorio. Se usa Double por simplicidad
+     * 6) Precio del producto. Obligatorio. Se usa Double por simplicidad
      */
     @Column(nullable = false)
     private Double precio;
 
     /**
-     * 8) Descuento (0-99). Obligatorio
+     * 7) Descuento (0-99). Obligatorio
      */
     @Column(nullable = false)
     private Integer descuento;
+
+    // Relación con marca - Muchos productos pertenecen a una marca
+    @ManyToOne(optional = false) // obligatorio
+    @JoinColumn(name = "id_marca")
+    private Marca marca;
+
+    // Relación con categorías: Muchos productos pueden estar en muchas categorías
+    @ManyToMany
+    @JoinTable(
+            name = "productos_categorias",
+            joinColumns = @JoinColumn(name = "id_producto"),
+            inverseJoinColumns = @JoinColumn(name = "id_categoria")
+    )
+    private List<Categoria> categorias;
 }

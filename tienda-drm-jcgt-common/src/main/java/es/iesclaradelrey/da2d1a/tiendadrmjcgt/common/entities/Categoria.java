@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * Representa una categoría de productos dentro de la tienda.
  * <p>
@@ -45,4 +47,8 @@ public class Categoria {
      */
     @Column(length = 500)
     private String imagen;
+
+    // Relación con productos: Varias categorías pueden tener varios productos
+    @ManyToMany(mappedBy = "categorias")
+    private List<Producto> productos;
 }

@@ -1,12 +1,17 @@
 package es.iesclaradelrey.da2d1a.tiendadrmjcgt.web.controllers;
 
 import es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.entities.Categoria;
+import es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.entities.Producto;
 import es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.services.CategoriaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -57,17 +62,23 @@ public class CategoriaController {
      * en caso de no encontrar el registro.
      */
     @GetMapping("/{id}")
-    public String detalleCategoria(@PathVariable("id") Long id, Model model) {
-        // Busca la categoría usando optional (puede no existir la categoria con el id especificado)
-        Optional<Categoria> categoriaOpt = categoriaService.getById(id);
+    public String detalle(@PathVariable Long id, Model model) {
+        // getById devuelve Optional, usamos .orElse(null)
+        Categoria categoria = categoriaService.getById(id).orElse(null);
 
-        if (categoriaOpt.isPresent()) {
-            // Si existe, se pasa a la vista
-            model.addAttribute("categoria", categoriaOpt.get());
-            return "categorias/detalle"; // Nombre del archivo HTML
-        } else {
-            // Si el usuario pone un ID que no existe (ej: /categorias/peluches), se vuelve al listado
+        if (categoria == null) {
             return "redirect:/categorias";
         }
+
+        // Usa la propiedad de navegación categoria.getProductos()
+        List<Producto> productosOrdenados = new ArrayList<>(categoria.getProductos());
+
+        // Ordenación alfabética ignorando mayúsculas/minúsculas
+        productosOrdenados.sort(Comparator.comparing(Producto::getNombre, String.CASE_INSENSITIVE_ORDER));
+
+        model.addAttribute("categoria", categoria);
+        model.addAttribute("productosDeLaCategoria", productosOrdenados);
+
+        return "categorias/detalle";
     }
 }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head th:replace="~{layout/base :: head(titulo=${marca.nombre})}"></head>
+
+<body class="d-flex flex-column h-100">
+
+<nav th:replace="~{layout/base :: navbar}"></nav>
+
+<header class="bg-light py-5 mb-5 border-bottom">
+    <div class="container text-center">
+        <div class="mb-3">
+            <img th:if="${marca.imagen != null}"
+                 th:src="@{'/imagenes/marcas/' + ${marca.imagen}}"
+                 th:alt="${'Logo de ' + marca.nombre}"
+                 style="height: 100px; object-fit: contain;">
+        </div>
+
+        <h1 class="display-4 fw-bold" th:text="${marca.nombre}">Nombre Marca</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;" th:text="${marca.descripcion}">Descripción...</p>
+    </div>
+</header>
+
+<main class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold">
+            Productos de esta marca
+            <span class="badge bg-dark ms-2" th:text="${#lists.size(productosDeLaMarca)}">0</span>
+        </h3>
+        <a th:href="@{/productos}" class="btn btn-outline-secondary btn-sm">Ver todo el catálogo</a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+
+        <div class="col" th:each="p : ${productosDeLaMarca}">
+            <div class="card h-100 shadow-sm border-0 position-relative">
+
+                <div th:if="${p.descuento > 0}"
+                     class="badge bg-danger position-absolute top-0 end-0 m-2"
+                     th:text="${'-' + p.descuento + '%'}"></div>
+
+                <img th:src="${p.imagen != null && !p.imagen.isEmpty()} ? @{${p.imagen}} : @{/imagenes/image_not_found.jpg}"
+                     class="card-img-top p-3"
+                     th:alt="${p.nombre}"
+                     style="height: 200px; object-fit: contain;">
+
+                <div class="card-body d-flex flex-column text-center">
+                    <h5 class="card-title fw-bold">
+                        <a th:href="@{/productos/{id}/{slug}(id=${p.id}, slug=${p.nombre})}"
+                           th:text="${p.nombre}" class="text-decoration-none text-dark stretched-link"></a>
+                    </h5>
+
+                    <div class="mt-auto">
+                        <span th:if="${p.descuento > 0}"
+                              class="text-muted text-decoration-line-through small d-block"
+                              th:text="${#numbers.formatDecimal(p.precio, 1, 2) + '€'}"></span>
+                        <span class="fw-bold h5 text-primary"
+                              th:text="${#numbers.formatDecimal(p.descuento > 0 ? (p.precio * (1 - p.descuento/100.0)) : p.precio, 1, 2) + '€'}">
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div th:if="${#lists.isEmpty(productosDeLaMarca)}" class="alert alert-info text-center py-5">
+        <p class="mb-0">Actualmente no tenemos productos disponibles de esta marca.</p>
+    </div>
+</main>
+
+<footer th:replace="~{layout/base :: footer}"></footer>
+
+</body>
+</html>

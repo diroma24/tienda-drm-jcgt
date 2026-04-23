@@ -1,52 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 
-<head th:replace="~{layout/base :: head(titulo='Productos')}">
-    <style>
-        .badge-descuento {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: #ff4d4d;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 50px;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            z-index: 2;
-        }
-        .precio-tachado {
-            text-decoration: line-through;
-            color: #adb5bd;
-            font-size: 0.9rem;
-            margin-right: 8px;
-        }
-        .precio-final {
-            color: #212529;
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-        .btn-mud-tree {
-            background-color: #7cfc00; /* Color Mud */
-            color: #000;
-            font-weight: bold;
-            border: none;
-        }
-        .btn-mud-tree:hover {
-            background-color: #00bfff; /* Color Tree */
-            color: white;
-        }
-        .card-title-link {
-            text-decoration: none;
-            color: inherit;
-        }
-        .card-title-link:hover {
-            color: #00bfff;
-        }
-    </style>
-</head>
+<head th:replace="~{layout/base :: head(titulo='Productos')}"></head>
 
 <body class="d-flex flex-column h-100">
+
+<style>
+    /* Estilo del Badge igual al de Detalles */
+    .badge-oferta {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 1rem; /* Equivalente a m-3 de Bootstrap */
+        padding: 0.5rem; /* Equivalente a p-2 */
+        z-index: 10;
+    }
+
+    /* Ajustes para que la card se parezca a la imagen de referencia */
+    .card-title-link {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+        font-size: 1rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    .marca-link {
+        color: #00bfff;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+    .cat-link {
+        color: #007bff;
+        text-decoration: underline;
+        font-size: 0.9rem;
+        margin-right: 5px;
+    }
+    .precio-tachado {
+        text-decoration: line-through;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-right: 8px;
+    }
+    .precio-final {
+        color: #212529;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+    .btn-ver-detalle {
+        background-color: #388e3c;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: block;
+        margin-top: 10px;
+    }
+    .btn-ver-detalle:hover {
+        background-color: #2e7d32;
+        color: white;
+    }
+</style>
 
 <nav th:replace="~{layout/base :: navbar}"></nav>
 
@@ -59,41 +76,52 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
 
         <div class="col" th:each="p : ${productos}">
-            <div class="card h-100 shadow-sm border-0 position-relative">
+            <div class="card h-100 border-0 shadow-sm position-relative">
 
-                <div th:if="${p.descuento > 0}" class="badge-descuento" th:text="${'-' + p.descuento + '%'}"></div>
+                <div th:if="${p.descuento > 0}"
+                     class="badge bg-danger badge-oferta"
+                     th:text="${'-' + p.descuento + '%'}"></div>
 
-                <img th:if="${p.imagen != null && !p.imagen.isEmpty()}"
-                     th:src="@{${p.imagen}}"
-                     class="card-img-top p-3"
-                     th:alt="${'Imagen de ' + p.nombre}"
-                     style="height: 220px; object-fit: contain;">
+                <div class="p-3 text-center">
+                    <img th:src="${p.imagen != null && !p.imagen.isEmpty()} ? @{${p.imagen}} : @{/imagenes/image_not_found.jpg}"
+                         class="img-fluid"
+                         style="height: 180px; object-fit: contain;"
+                         th:alt="${p.nombre}">
+                </div>
 
-                <img th:unless="${p.imagen != null && !p.imagen.isEmpty()}"
-                     th:src="@{/imagenes/image_not_found.jpg}"
-                     class="card-img-top p-3"
-                     alt=""
-                     style="height: 220px; object-fit: contain;">
+                <div class="card-body d-flex flex-column pt-0">
+                    <a class="card-title-link"
+                       th:href="@{/productos/{id}/{slug}(id=${p.id}, slug=${p.nombre})}"
+                       th:text="${p.nombre}">Nombre</a>
 
-                <div class="card-body d-flex flex-column">
-                    <h3 class="h5">
-                        <a class="card-title-link"
-                           th:href="@{/productos/{id}/{slug}(id=${p.id}, slug=${p.nombre})}"
-                           th:text="${p.nombre}">Nombre</a>
-                    </h3>
+                    <div class="mb-2">
+                        <a th:href="@{/marcas/{id}(id=${p.marca.id})}"
+                           th:text="${p.marca.nombre}" class="marca-link"></a>
+                    </div>
 
-                    <p class="text-primary small mb-1" th:if="${p.marca != null}" th:text="${p.marca}"></p>
-
-                    <p class="card-text text-muted small" th:text="${#strings.abbreviate(p.descripcion, 200)}"></p>
+                    <div th:if="${not #lists.isEmpty(p.categorias)}" class="mb-3">
+                        <p th:if="${#lists.size(p.categorias) == 1}" class="mb-0">
+                            <a th:href="@{/categorias/{id}(id=${p.categorias[0].id})}"
+                               th:text="${p.categorias[0].nombre}" class="cat-link"></a>
+                        </p>
+                        <ul th:if="${#lists.size(p.categorias) > 1}" class="list-unstyled d-flex flex-wrap m-0">
+                            <li th:each="cat : ${p.categorias}">
+                                <a th:href="@{/categorias/{id}(id=${cat.id})}"
+                                   th:text="${cat.nombre}" class="cat-link"></a>
+                            </li>
+                        </ul>
+                    </div>
 
                     <div class="mt-auto">
-                        <div class="mb-3">
-                            <span th:if="${p.descuento > 0}" class="precio-tachado" th:text="${#numbers.formatDecimal(p.precio, 1, 2) + '€'}"></span>
+                        <div class="mb-2">
+                                <span th:if="${p.descuento > 0}" class="precio-tachado"
+                                      th:text="${#numbers.formatDecimal(p.precio, 1, 'POINT', 2, 'COMMA') + ' €'}"></span>
+
                             <span class="precio-final"
-                                  th:text="${#numbers.formatDecimal(p.descuento > 0 ? (p.precio * (1 - p.descuento/100.0)) : p.precio, 1, 2) + '€'}">
+                                  th:text="${#numbers.formatDecimal(p.descuento > 0 ? (p.precio * (1 - p.descuento/100.0)) : p.precio, 1, 'POINT', 2, 'COMMA') + ' €'}">
                                 </span>
                         </div>
-                        <a th:href="@{/productos/{id}/{slug}(id=${p.id}, slug=${p.nombre})}" class="btn btn-mud-tree w-100">Ver Detalle</a>
+                        <a th:href="@{/productos/{id}/{slug}(id=${p.id}, slug=${p.nombre})}" class="btn-ver-detalle">Ver Detalle</a>
                     </div>
                 </div>
             </div>
