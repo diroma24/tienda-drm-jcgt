@@ -44,7 +44,7 @@ public class MarcaAdminController {
         }
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
         Marca marca = marcaService.findById(id);
         if (marca == null) return "redirect:/admin/marcas";
@@ -63,6 +63,27 @@ public class MarcaAdminController {
             model.addAttribute("mensajeError", e.getMessage());
             model.addAttribute("volverUrl", "/admin/marcas/editar/" + id);
             return "admin/error-validacion";
+        }
+    }
+
+    // --- REQUISITO 3.5: BORRADO ---
+    @GetMapping("/borrar/{id}")
+    public String borrarForm(@PathVariable Long id, Model model) {
+        Marca marca = marcaService.findById(id);
+        if (marca == null) return "redirect:/admin/marcas";
+        model.addAttribute("marca", marca);
+        return "admin/marcas/borrar";
+    }
+
+    @PostMapping("/borrar")
+    public String eliminar(@RequestParam Long id, Model model) {
+        try {
+            marcaService.deleteById(id);
+            return "redirect:/admin/marcas";
+        } catch (Exception e) {
+            model.addAttribute("marca", marcaService.findById(id));
+            model.addAttribute("error", "No se puede eliminar la marca porque tiene productos asociados: " + e.getMessage());
+            return "admin/marcas/borrar";
         }
     }
 

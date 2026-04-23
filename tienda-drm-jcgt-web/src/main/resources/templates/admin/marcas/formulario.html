@@ -12,11 +12,12 @@
         <div class="col-md-6">
             <div class="card shadow border-0">
                 <div class="card-header bg-warning text-dark p-3">
-                    <h2 class="h5 mb-0 fw-bold">Configuración de Marca</h2>
+                    <h2 class="h5 mb-0 fw-bold" th:text="${marca.id == null ? 'Registrar Nueva Marca' : 'Editar Marca: ' + marca.nombre}">Configuración de Marca</h2>
                 </div>
                 <div class="card-body p-4">
 
-                    <form th:action="@{/admin/marcas/nuevo}" th:object="${marca}" method="post" autocomplete="off">
+                    <form th:action="@{${marca.id == null ? '/admin/marcas/nuevo' : '/admin/marcas/editar/' + marca.id}}"
+                          th:object="${marca}" method="post" autocomplete="off">
 
                         <input type="hidden" th:field="*{id}">
 
@@ -29,21 +30,18 @@
                         <div class="mb-4">
                             <label for="descripcion" class="form-label fw-bold">Descripción de la Marca</label>
                             <textarea class="form-control" rows="4" th:field="*{descripcion}"
-                                      placeholder="Ej: Empresa japonesa líder en entretenimiento, responsable de la franquicia Pokémon y su juego de cartas coleccionables desde 1996..."></textarea>
-                            <div class="form-text text-muted">Explique brevemente la historia o relevancia de este fabricante.</div>
+                                      placeholder="Historia o relevancia de este fabricante..."></textarea>
                         </div>
 
                         <div class="d-flex gap-2 border-top pt-3">
                             <button type="submit" class="btn btn-warning px-4 fw-bold shadow-sm">Guardar Marca</button>
                             <a th:href="@{/admin/marcas}" class="btn btn-outline-secondary px-4">Cancelar</a>
                         </div>
-
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </main>
-
 </body>
 </html>
