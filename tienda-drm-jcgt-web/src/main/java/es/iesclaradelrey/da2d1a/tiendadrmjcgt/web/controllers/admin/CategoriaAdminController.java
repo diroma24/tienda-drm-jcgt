@@ -44,7 +44,7 @@ public class CategoriaAdminController {
         }
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
         Categoria categoria = categoriaService.findById(id);
         if (categoria == null) return "redirect:/admin/categorias";
@@ -63,6 +63,27 @@ public class CategoriaAdminController {
             model.addAttribute("mensajeError", e.getMessage());
             model.addAttribute("volverUrl", "/admin/categorias/editar/" + id);
             return "admin/error-validacion";
+        }
+    }
+
+    // --- REQUISITO 3.5: BORRADO ---
+    @GetMapping("/borrar/{id}")
+    public String borrarForm(@PathVariable Long id, Model model) {
+        Categoria categoria = categoriaService.findById(id);
+        if (categoria == null) return "redirect:/admin/categorias";
+        model.addAttribute("categoria", categoria);
+        return "admin/categorias/borrar";
+    }
+
+    @PostMapping("/borrar")
+    public String eliminar(@RequestParam Long id, Model model) {
+        try {
+            categoriaService.deleteById(id);
+            return "redirect:/admin/categorias";
+        } catch (Exception e) {
+            model.addAttribute("categoria", categoriaService.findById(id));
+            model.addAttribute("error", "No se puede eliminar: " + e.getMessage());
+            return "admin/categorias/borrar";
         }
     }
 
