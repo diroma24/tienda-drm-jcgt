@@ -6,10 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * Interfaz de repositorio especializada para la gestión de entidades {@link Categoria} mediante JPA.
- * Hereda operaciones CRUD estándar (save, findAll, findById, etc.) de {@link JpaRepository}.
+ * Interfaz de acceso a datos para la entidad Producto.
+ * <p>
+ * Al extender de JpaRepository, proporciona automáticamente la implementación
+ * necesaria para realizar operaciones de persistencia sobre la base de datos,
+ * incluyendo métodos de creación, lectura, actualización y borrado.
+ * </p>
  */
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
-    // Métodos específicos
+    // Espacio reservado para la definición de métodos de consulta derivados (Query Methods)
 }

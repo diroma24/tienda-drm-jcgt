@@ -11,8 +11,29 @@ import java.util.List;
  * </p>
  */
 public interface MarcaService {
+
+    /**
+     * Recupera la lista completa de marcas existentes en el sistema.
+     * @return Colección de objetos Marca.
+     */
     List<Marca> findAll();
+
+    /**
+     * Busca una marca específica mediante su identificador único.
+     * @param id Identificador de la marca.
+     * @return La entidad Marca encontrada o null si no existe.
+     */
     Marca findById(Long id);
+
+    /**
+     * Gestiona la persistencia de una marca, permitiendo tanto el registro inicial como la actualización.
+     * @param marca Objeto con los datos de la marca a procesar.
+     */
     void save(Marca marca);
+
+    /**
+     * Elimina del sistema la marca asociada al identificador proporcionado.
+     * @param id Identificador de la marca a eliminar.
+     */
     void deleteById(Long id);
 }

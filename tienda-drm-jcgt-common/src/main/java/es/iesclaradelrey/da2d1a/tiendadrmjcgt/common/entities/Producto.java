@@ -8,64 +8,73 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Entidad que representa un producto de la tienda.
+ * Representa un artículo a la venta dentro de la tienda.
+ * <p>
+ * Esta clase emplea anotaciones de Lombok para gestionar de forma automática
+ * el estado del objeto y su integración con el motor de persistencia JPA.
+ * </p>
  */
-@Entity
-@Table(name = "productos")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity // Define la clase como una entidad gestionada por JPA
+@Table(name = "productos") // Especifica el nombre de la tabla física en la base de datos
+@Data // Genera getters, setters, toString, equals y hashCode automáticamente
+@NoArgsConstructor // Proporciona el constructor vacío requerido por Hibernate
+@AllArgsConstructor // Genera un constructor con todos los atributos de la clase
 public class Producto {
 
     /**
-     * 1) Identificador único asignado automáticamente por la base de datos (patrón identity)
+     * Identificador único autoincremental en la base de datos.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * 2) Código EAN-13 (13 dígitos). Obligatorio
+     * Código de barras EAN-13: campo obligatorio con longitud fija de 13 caracteres.
      */
     @Column(nullable = false, length = 13)
     private String codigoEan;
 
     /**
-     * 3) Nombre del producto. Obligatorio. Máximo 200 caracteres
+     * Nombre comercial: obligatorio y limitado a 200 caracteres.
      */
     @Column(nullable = false, length = 200)
     private String nombre;
 
     /**
-     * 4) Descripción del producto. Obligatoria. Máximo 4000 caracteres
+     * Descripción detallada del artículo: obligatoria, soporta hasta 4000 caracteres.
      */
     @Column(nullable = false, length = 4000)
     private String descripcion;
 
     /**
-     * 5) URL de la imagen relativa a la raíz. Opcional. Máximo 500 caracteres
+     * Ruta relativa de la imagen: campo opcional con máximo de 500 caracteres.
      */
     @Column(length = 500)
     private String imagen;
 
     /**
-     * 6) Precio del producto. Obligatorio. Se usa Double por simplicidad
+     * Valor monetario unitario del producto: campo obligatorio.
      */
     @Column(nullable = false)
     private Double precio;
 
     /**
-     * 7) Descuento (0-99). Obligatorio
+     * Porcentaje de reducción de precio (valor entre 0 y 99): obligatorio.
      */
     @Column(nullable = false)
     private Integer descuento;
 
-    // Relación con marca - Muchos productos pertenecen a una marca
-    @ManyToOne(optional = false) // obligatorio
-    @JoinColumn(name = "id_marca")
+    /**
+     * Relación con la marca: cada producto pertenece obligatoriamente a un fabricante.
+     */
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_marca") // Define la clave foránea en la tabla productos
     private Marca marca;
 
-    // Relación con categorías: Muchos productos pueden estar en muchas categorías
+    /**
+     * Relación con categorías: permite la clasificación del producto en múltiples secciones.
+     * Define una tabla intermedia para gestionar la relación muchos a muchos.
+     */
     @ManyToMany
     @JoinTable(
             name = "productos_categorias",
@@ -74,6 +83,9 @@ public class Producto {
     )
     private List<Categoria> categorias;
 
+    /**
+     * Representación textual personalizada para evitar ciclos de recursión con relaciones.
+     */
     @Override
     public String toString() {
         return "Producto [id=" + id + ", nombre=" + nombre + "]";

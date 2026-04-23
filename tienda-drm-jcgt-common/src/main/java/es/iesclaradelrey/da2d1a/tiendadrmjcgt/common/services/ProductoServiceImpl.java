@@ -7,31 +7,44 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Implementación de los servicios de negocio para la entidad {@link Producto}.
+ * Implementación de los servicios de negocio para la gestión de productos.
+ * <p>
+ * Proporciona la lógica operativa necesaria para manipular los datos de los productos,
+ * apoyándose en el repositorio de persistencia correspondiente.
+ * </p>
  */
-@Service
+@Service // Identifica esta clase como un componente de servicio en el contexto de Spring
 public class ProductoServiceImpl implements ProductoService {
 
     private final ProductoRepository productoRepository;
 
+    /**
+     * Constructor para la inyección de dependencias del repositorio de productos.
+     */
     public ProductoServiceImpl(ProductoRepository productoRepository) {
         this.productoRepository = productoRepository;
     }
 
+    /**
+     * Obtiene todos los productos almacenados en la base de datos.
+     */
     @Override
     public List<Producto> findAll() {
         return productoRepository.findAll();
     }
 
+    /**
+     * Localiza un producto por su identificador único. Retorna null si no se encuentra.
+     */
     @Override
     public Producto findById(Long id) {
-        // Es mejor lanzar una excepción o gestionar el Optional correctamente
         return productoRepository.findById(id).orElse(null);
     }
 
     /**
-     * REQUISITO 3.3 y 3.4: Guarda un producto (nuevo o editado).
-     * @Transactional asegura que si algo falla en la BD, se haga rollback.
+     * Gestiona la persistencia de un producto (creación o actualización).
+     * Garantiza la integridad de la operación mediante el uso de transacciones.
+     * @throws RuntimeException si ocurre un error durante el proceso de guardado.
      */
     @Override
     @Transactional
@@ -39,13 +52,13 @@ public class ProductoServiceImpl implements ProductoService {
         try {
             productoRepository.save(producto);
         } catch (Exception e) {
-            // Re-lanzamos la excepción para que el controlador la capture (punto 3.3)
             throw new RuntimeException("No se ha podido guardar el producto: " + e.getMessage());
         }
     }
 
     /**
-     * REQUISITO 3.5: Elimina un producto por su ID.
+     * Realiza el borrado de un producto tras validar su existencia en el sistema.
+     * @throws RuntimeException si el producto no existe o si posee dependencias que impiden su eliminación.
      */
     @Override
     @Transactional
