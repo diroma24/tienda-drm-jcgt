@@ -22,18 +22,33 @@
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         <div class="col" th:each="p : ${productosDeLaCategoria}">
-            <div class="card h-100 shadow-sm border-0 position-relative">
-                <div th:if="${p.descuento > 0}" class="badge bg-danger position-absolute top-0 end-0 m-2" th:text="${'-' + p.descuento + '%'}"></div>
+            <div class="card h-100 shadow-sm border-0 position-relative overflow-hidden">
+                <div th:if="${p.descuento > 0}" class="badge bg-danger position-absolute top-0 end-0 m-2" style="z-index: 2;" th:text="${'-' + p.descuento + '%'}"></div>
 
                 <img th:src="${p.imagen != null && !p.imagen.isEmpty()} ? @{${p.imagen}} : @{/imagenes/image_not_found.jpg}"
-                     class="card-img-top p-3" style="height: 200px; object-fit: contain;">
+                     class="card-img-top p-3" style="height: 200px; object-fit: contain;" th:alt="${p.nombre}">
 
                 <div class="card-body d-flex flex-column text-center">
+                    <small class="text-uppercase text-muted fw-bold mb-1"
+                           th:text="${p.marca != null ? p.marca.nombre : 'Sin Marca'}">Marca</small>
+
                     <h5 class="card-title fw-bold">
                         <a th:href="@{/productos/{id}/{slug}(id=${p.id}, slug=${p.nombre})}"
                            th:text="${p.nombre}" class="text-decoration-none text-dark stretched-link"></a>
                     </h5>
+
+                    <div class="mb-2">
+                        <span th:each="cat : ${p.categorias}"
+                              th:if="${cat.id != categoria.id}"
+                              th:text="${cat.nombre}"
+                              class="badge rounded-pill bg-light text-dark border me-1" style="font-size: 0.7rem;">
+                        </span>
+                    </div>
+
                     <div class="mt-auto">
+                        <div th:if="${p.descuento > 0}">
+                            <small class="text-decoration-line-through text-muted" th:text="${#numbers.formatDecimal(p.precio, 1, 2) + '€'}"></small>
+                        </div>
                         <span class="fw-bold h5 text-primary"
                               th:text="${#numbers.formatDecimal(p.descuento > 0 ? (p.precio * (1 - p.descuento/100.0)) : p.precio, 1, 2) + '€'}">
                         </span>
@@ -44,7 +59,8 @@
     </div>
 
     <div th:if="${#lists.isEmpty(productosDeLaCategoria)}" class="alert alert-warning text-center py-5">
-        <p class="mb-0">Aún no hay productos asignados a la categoría <strong th:text="${categoria.nombre}"></strong>.</p>
+        <p class="mb-0 text-muted">Aún no hay productos asignados a la categoría <strong th:text="${categoria.nombre}"></strong>.</p>
+        <a href="/categorias" class="btn btn-outline-warning mt-3">Volver al listado</a>
     </div>
 </main>
 
