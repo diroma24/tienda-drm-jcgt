@@ -2,10 +2,10 @@ package es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.services;
 
 import es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.entities.Categoria;
 import es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.repositories.CategoriaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
 
 /**
  * Implementación de los servicios de negocio para la entidad {@link Categoria}.
@@ -21,27 +21,32 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public void add(Categoria categoria) {
-        categoriaRepository.save(categoria);
-    }
-
-    @Override
-    public Collection<Categoria> getAll() {
+    public List<Categoria> findAll() {
         return categoriaRepository.findAll();
     }
 
     @Override
-    public Optional<Categoria> getById(Long id) {
-        return categoriaRepository.findById(id);
+    public Categoria findById(Long id) {
+        return categoriaRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void update(Categoria categoria) {
-        categoriaRepository.save(categoria);
+    @Transactional
+    public void save(Categoria categoria) {
+        try {
+            categoriaRepository.save(categoria);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al guardar la categoría: " + e.getMessage());
+        }
     }
 
     @Override
-    public void delete(Long id) {
-        categoriaRepository.deleteById(id);
+    @Transactional
+    public void deleteById(Long id) {
+        try {
+            categoriaRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("No se puede borrar la categoría porque tiene productos asociados.");
+        }
     }
 }
