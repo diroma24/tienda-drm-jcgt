@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head th:replace="~{layout/base :: head(titulo='Nuestras Marcas')}"></head>
+
+<body class="d-flex flex-column h-100">
+
+<nav th:replace="~{layout/base :: navbar}"></nav>
+
+<header class="bg-light py-5 mb-5 border-bottom">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">Nuestras Marcas</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;">
+            Trabajamos con los mejores fabricantes para garantizar la calidad de cada producto en nuestro catálogo.
+        </p>
+    </div>
+</header>
+
+<main class="container mb-5">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+        <div class="col" th:each="marca : ${listaMarcas}">
+            <div class="card h-100 shadow-sm border-0 transition-hover">
+                <div class="card-body d-flex flex-column align-items-center text-center p-4">
+
+                    <div class="mb-3 d-flex align-items-center justify-content-center" style="height: 120px; width: 100%;">
+                        <img th:src="${marca.imagen != null && !marca.imagen.isEmpty()} ? @{'/imagenes/marcas/' + ${marca.imagen}} : @{/imagenes/image_not_found.jpg}"
+                             th:alt="${'Logo de ' + marca.nombre}"
+                             class="img-fluid"
+                             style="max-height: 100%; object-fit: contain;">
+                    </div>
+
+                    <h3 class="h5 fw-bold mb-2" th:text="${marca.nombre}">Nombre de Marca</h3>
+
+                    <p class="text-muted small mb-4"
+                       th:text="${#strings.abbreviate(marca.descripcion, 120)}">
+                        Descripción corta de la marca...
+                    </p>
+
+                    <div class="mt-auto w-100">
+                        <a th:href="@{/marcas/{id}(id=${marca.id})}"
+                           class="btn btn-outline-primary w-100">
+                            Ver productos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div th:if="${#lists.isEmpty(listaMarcas)}" class="alert alert-warning text-center py-5">
+        <h4 class="alert-heading">No hay marcas disponibles</h4>
+        <p class="mb-0">Estamos actualizando nuestro catálogo. Vuelve pronto para ver las novedades.</p>
+    </div>
+</main>
+
+<footer th:replace="~{layout/base :: footer}"></footer>
+
+<style>
+    /* Efecto sutil al pasar el ratón sobre la tarjeta */
+    .transition-hover {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .transition-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+</style>
+
+</body>
+</html>
