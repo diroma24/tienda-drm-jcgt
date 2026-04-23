@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Nuevo Producto - Administración</title>
+    <title>Gestión de Producto - Administración</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -12,44 +12,47 @@
         <div class="col-md-8">
             <div class="card shadow border-0">
                 <div class="card-header bg-primary text-white">
-                    <h2 class="h5 mb-0">Crear Nuevo Producto</h2>
+                    <h2 class="h5 mb-0">Datos del Producto</h2>
                 </div>
                 <div class="card-body p-4">
 
-                    <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
-
-                    <form th:action="@{/admin/productos/nuevo}" th:object="${producto}" method="post">
+                    <form th:action="@{/admin/productos/nuevo}" th:object="${producto}" method="post" autocomplete="off">
 
                         <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre del Producto</label>
-                            <input type="text" class="form-control" th:field="*{nombre}">
+                            <label for="nombre" class="form-label fw-bold">Nombre del Producto</label>
+                            <input type="text" class="form-control" th:field="*{nombre}"
+                                   placeholder="Ej: Caja de Entrenador Élite: Escarlata y Púrpura">
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="precio" class="form-label">Precio (€)</label>
-                                <input type="number" step="0.01" class="form-control" th:field="*{precio}">
+                                <label for="precio" class="form-label fw-bold">Precio (€)</label>
+                                <input type="number" step="0.01" class="form-control" th:field="*{precio}"
+                                       placeholder="49.99">
                             </div>
                             <div class="col-md-6">
-                                <label for="descuento" class="form-label">Descuento (%)</label>
-                                <input type="number" class="form-control" th:field="*{descuento}">
+                                <label for="descuento" class="form-label fw-bold">Descuento (%)</label>
+                                <input type="number" class="form-control" th:field="*{descuento}"
+                                       placeholder="Ej: 10">
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="descripcion" class="form-label">Descripción</label>
-                            <textarea class="form-control" rows="3" th:field="*{descripcion}"></textarea>
+                            <label for="codigoEan" class="form-label fw-bold">Código EAN-13</label>
+                            <input type="text" class="form-control" th:field="*{codigoEan}"
+                                   placeholder="8400000000000">
                         </div>
 
                         <div class="mb-3">
-                            <label for="codigoEan" class="form-label">Código EAN-13</label>
-                            <input type="text" class="form-control" th:field="*{codigoEan}">
+                            <label for="descripcion" class="form-label fw-bold">Descripción del Producto</label>
+                            <textarea class="form-control" rows="4" th:field="*{descripcion}"
+                                      placeholder="Escriba aquí los detalles técnicos, contenido de la caja o estado del producto..."></textarea>
                         </div>
 
                         <div class="mb-3">
-                            <label for="marca" class="form-label">Fabricante / Marca</label>
+                            <label for="marca" class="form-label fw-bold">Fabricante / Marca</label>
                             <select class="form-select" th:field="*{marca}">
-                                <option value="">Seleccione una marca...</option>
+                                <option value="">-- Seleccione una marca --</option>
                                 <option th:each="m : ${marcas}"
                                         th:value="${m.id}"
                                         th:text="${m.nombre}"></option>
@@ -57,8 +60,8 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label d-block">Categorías del Producto</label>
-                            <div class="border rounded p-3 bg-white">
+                            <label class="form-label fw-bold d-block">Categorías asignadas</label>
+                            <div class="border rounded p-3 bg-white" style="max-height: 150px; overflow-y: auto;">
                                 <div th:each="cat : ${categorias}" class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox"
                                            th:field="*{categorias}"
@@ -69,8 +72,8 @@
                         </div>
 
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary px-4">Aceptar</button>
-                            <a th:href="@{/admin/productos}" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary px-4">Guardar Producto</button>
+                            <a th:href="@{/admin/productos}" class="btn btn-outline-secondary">Volver al listado</a>
                         </div>
 
                     </form>

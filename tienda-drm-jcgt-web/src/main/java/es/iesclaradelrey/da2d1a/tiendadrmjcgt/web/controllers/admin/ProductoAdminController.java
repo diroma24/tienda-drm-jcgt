@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/productos")
 public class ProductoAdminController {
@@ -50,15 +53,33 @@ public class ProductoAdminController {
     @PostMapping("/nuevo")
     public String guardar(@ModelAttribute Producto producto, Model model) {
         try {
-            // Asegúrate de que tu service tenga el método save o add
+            List<String> errores = new ArrayList<>();
+
+            // Validación de Atributos Básicos
+            if (producto.getNombre() == null || producto.getNombre().isBlank()) errores.add("El nombre es obligatorio.");
+            if (producto.getPrecio() == null || producto.getPrecio() < 0) errores.add("El precio no puede ser negativo.");
+
+            // VALIDACIÓN DE RELACIONES (REQUISITO 3.3)
+            if (producto.getMarca() == null || producto.getMarca().getId() == null) {
+                errores.add("Debe seleccionar obligatoriamente una Marca para el producto.");
+            }
+
+            // Las categorías suelen ser un Set o List. Si es obligatorio tener al menos una:
+            if (producto.getCategorias() == null || producto.getCategorias().isEmpty()) {
+                errores.add("El producto debe pertenecer al menos a una categoría.");
+            }
+
+            if (!errores.isEmpty()) {
+                throw new IllegalArgumentException(String.join("|", errores));
+            }
+
             productoService.save(producto);
             return "redirect:/admin/productos";
+
         } catch (Exception e) {
-            // Capturamos el error para mostrarlo en el formulario sin perder datos
-            model.addAttribute("error", "Error al guardar: " + e.getMessage());
-            model.addAttribute("marcas", marcaService.findAll());
-            model.addAttribute("categorias", categoriaService.findAll());
-            return "admin/productos/formulario";
+            model.addAttribute("mensajeError", e.getMessage());
+            model.addAttribute("volverUrl", "/admin/productos/nuevo");
+            return "admin/error-validacion";
         }
     }
 }

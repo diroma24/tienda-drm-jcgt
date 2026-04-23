@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Error de Validación - Administración</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger shadow">
+                <div class="card-header bg-danger text-white">
+                    <h1 class="h4 mb-0">Se han detectado errores</h1>
+                </div>
+                <div class="card-body">
+                    <p class="fw-bold">No se ha podido procesar el formulario debido a los siguientes fallos:</p>
+                    <ul class="list-group list-group-flush mb-4">
+                        <li th:each="err : ${#strings.arraySplit(mensajeError, '|')}"
+                            class="list-group-item text-danger">
+                            <i class="bi bi-x-circle-fill me-2"></i>
+                            <span th:text="${err}">Error</span>
+                        </li>
+                    </ul>
+                    <a th:href="@{${volverUrl}}" class="btn btn-danger w-100">Volver a intentar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
