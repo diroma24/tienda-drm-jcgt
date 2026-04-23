@@ -51,4 +51,9 @@ public class Categoria {
     // Relación con productos: Varias categorías pueden tener varios productos
     @ManyToMany(mappedBy = "categorias")
     private List<Producto> productos;
+
+    @Override
+    public String toString() {
+        return "Categoria [id=" + id + ", nombre=" + nombre + "]";
+    }
 }

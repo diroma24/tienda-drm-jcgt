@@ -34,29 +34,41 @@ public class MarcaAdminController {
     @PostMapping("/nuevo")
     public String guardar(@ModelAttribute Marca marca, Model model) {
         try {
-            List<String> errores = new ArrayList<>();
-
-            // Validación de Nombre
-            if (marca.getNombre() == null || marca.getNombre().isBlank()) {
-                errores.add("El nombre de la marca no puede estar vacío.");
-            }
-
-            // Validación de Descripción (Opcional pero controlada)
-            if (marca.getDescripcion() != null && marca.getDescripcion().length() > 500) {
-                errores.add("La descripción es demasiado larga (máximo 500 caracteres).");
-            }
-
-            if (!errores.isEmpty()) {
-                throw new IllegalArgumentException(String.join("|", errores));
-            }
-
+            validarMarca(marca);
             marcaService.save(marca);
             return "redirect:/admin/marcas";
-
         } catch (Exception e) {
             model.addAttribute("mensajeError", e.getMessage());
             model.addAttribute("volverUrl", "/admin/marcas/nuevo");
             return "admin/error-validacion";
         }
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editar(@PathVariable Long id, Model model) {
+        Marca marca = marcaService.findById(id);
+        if (marca == null) return "redirect:/admin/marcas";
+        model.addAttribute("marca", marca);
+        return "admin/marcas/formulario";
+    }
+
+    @PostMapping("/editar/{id}")
+    public String actualizar(@PathVariable Long id, @ModelAttribute Marca marca, Model model) {
+        try {
+            marca.setId(id);
+            validarMarca(marca);
+            marcaService.save(marca);
+            return "redirect:/admin/marcas";
+        } catch (Exception e) {
+            model.addAttribute("mensajeError", e.getMessage());
+            model.addAttribute("volverUrl", "/admin/marcas/editar/" + id);
+            return "admin/error-validacion";
+        }
+    }
+
+    private void validarMarca(Marca marca) {
+        List<String> errores = new ArrayList<>();
+        if (marca.getNombre() == null || marca.getNombre().isBlank()) errores.add("El nombre de la marca es obligatorio.");
+        if (!errores.isEmpty()) throw new IllegalArgumentException(String.join("|", errores));
     }
 }

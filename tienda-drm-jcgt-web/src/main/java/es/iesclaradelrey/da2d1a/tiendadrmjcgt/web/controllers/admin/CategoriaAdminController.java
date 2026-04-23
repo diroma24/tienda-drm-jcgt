@@ -4,10 +4,7 @@ import es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.entities.Categoria;
 import es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.services.CategoriaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,34 +34,42 @@ public class CategoriaAdminController {
     @PostMapping("/nuevo")
     public String guardar(@ModelAttribute Categoria categoria, Model model) {
         try {
-            List<String> errores = new ArrayList<>();
-
-            // Validación de Nombre
-            if (categoria.getNombre() == null || categoria.getNombre().isBlank()) {
-                errores.add("El nombre de la categoría es obligatorio.");
-            } else if (categoria.getNombre().length() < 3) {
-                errores.add("El nombre de la categoría es demasiado corto (mínimo 3 caracteres).");
-            }
-
-            // Validación de Descripción (Obligatoria según tu petición)
-            if (categoria.getDescripcion() == null || categoria.getDescripcion().isBlank()) {
-                errores.add("La descripción de la categoría es obligatoria para informar al cliente.");
-            } else if (categoria.getDescripcion().length() > 1000) {
-                errores.add("La descripción no puede superar los 1000 caracteres.");
-            }
-
-            // Si hay fallos, disparamos la página de error dedicada
-            if (!errores.isEmpty()) {
-                throw new IllegalArgumentException(String.join("|", errores));
-            }
-
+            validarCategoria(categoria);
             categoriaService.save(categoria);
             return "redirect:/admin/categorias";
-
         } catch (Exception e) {
             model.addAttribute("mensajeError", e.getMessage());
             model.addAttribute("volverUrl", "/admin/categorias/nuevo");
             return "admin/error-validacion";
         }
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editar(@PathVariable Long id, Model model) {
+        Categoria categoria = categoriaService.findById(id);
+        if (categoria == null) return "redirect:/admin/categorias";
+        model.addAttribute("categoria", categoria);
+        return "admin/categorias/formulario";
+    }
+
+    @PostMapping("/editar/{id}")
+    public String actualizar(@PathVariable Long id, @ModelAttribute Categoria categoria, Model model) {
+        try {
+            categoria.setId(id);
+            validarCategoria(categoria);
+            categoriaService.save(categoria);
+            return "redirect:/admin/categorias";
+        } catch (Exception e) {
+            model.addAttribute("mensajeError", e.getMessage());
+            model.addAttribute("volverUrl", "/admin/categorias/editar/" + id);
+            return "admin/error-validacion";
+        }
+    }
+
+    private void validarCategoria(Categoria categoria) {
+        List<String> errores = new ArrayList<>();
+        if (categoria.getNombre() == null || categoria.getNombre().isBlank()) errores.add("El nombre es obligatorio.");
+        if (categoria.getDescripcion() == null || categoria.getDescripcion().isBlank()) errores.add("La descripción es obligatoria.");
+        if (!errores.isEmpty()) throw new IllegalArgumentException(String.join("|", errores));
     }
 }

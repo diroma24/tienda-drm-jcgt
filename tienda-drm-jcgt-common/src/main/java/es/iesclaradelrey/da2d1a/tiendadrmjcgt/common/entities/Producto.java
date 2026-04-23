@@ -73,4 +73,9 @@ public class Producto {
             inverseJoinColumns = @JoinColumn(name = "id_categoria")
     )
     private List<Categoria> categorias;
+
+    @Override
+    public String toString() {
+        return "Producto [id=" + id + ", nombre=" + nombre + "]";
+    }
 }
