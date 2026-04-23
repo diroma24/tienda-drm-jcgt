@@ -1,65 +1,182 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 
-<head th:replace="~{layout/base :: head(titulo='Tu tienda Pokémon')}"></head>
+<head th:replace="~{layout/base :: head(titulo='Hoenn TCG - Tu Tienda Pokémon')}"></head>
 
 <body class="d-flex flex-column h-100">
 
 <nav th:replace="~{layout/base :: navbar}"></nav>
 
-<header class="hero-section text-center bg-dark text-white py-5 shadow-lg"
-        style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/imagenes/tienda.png') no-repeat center center; background-size: cover;">
+<header class="hero-section text-center text-white py-5 shadow-lg"
+        th:style="'background: linear-gradient(135deg, rgba(124, 252, 0, 0.75) 0%, rgba(0, 191, 255, 0.75) 100%), url(' + @{/imagenes/tienda.png} + ') no-repeat center center; background-size: cover; min-height: 60vh; display: flex; align-items: center;'">
     <div class="container py-5">
-        <h1 class="display-3 fw-bold">Bienvenidos a Hoenn</h1>
-        <p class="lead">La mejor selección de cartas Pokémon TCG de España, de la raíz al río.</p>
-        <a th:href="@{/productos}" class="btn btn-lg btn-mud-tree mt-3">Ver Novedades</a>
+        <div class="badge bg-danger mb-3 px-3 py-2 text-uppercase fw-bold shadow">Nuevas expansiones disponibles</div>
+        <h1 class="display-2 fw-bold text-uppercase tracking-tight" style="text-shadow: 2px 2px 12px rgba(0,0,0,0.4);">Bienvenidos a Hoenn</h1>
+        <p class="lead fs-3 mb-4 fw-light" style="text-shadow: 1px 1px 5px rgba(0,0,0,0.3);">Coleccionismo de alto nivel, de la raíz al río.</p>
+        <div class="d-grid gap-3 d-md-block">
+            <a th:href="@{/productos}" class="btn btn-light btn-lg px-5 me-md-2 fw-bold shadow" style="color: #00bfff;">Ir al Catálogo</a>
+            <a th:href="@{/marcas}" class="btn btn-outline-light btn-lg px-5 shadow">Nuestras Marcas</a>
+        </div>
     </div>
 </header>
 
-<main class="container my-5" id="productos">
-    <h2 class="text-center mb-4">Últimas Capturas (Novedades)</h2>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <img th:src="@{/imagenes/categorias/Cartas.jpg}" class="card-img-top p-3" alt="Treecko VMAX" style="height: 250px; object-fit: contain;">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Treecko VMAX</h5>
-                    <p class="card-text text-muted">Expansión: Hoenn Legends</p>
-                    <h4 class="text-success fw-bold">14,95€</h4>
-                    <button class="btn btn-mud-tree w-100">Añadir al carrito</button>
+<main>
+    <section class="py-4 bg-white border-bottom shadow-sm">
+        <div class="container">
+            <div class="row text-center g-4">
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="bi bi-truck fs-1 text-primary me-3"></i>
+                        <div class="text-start">
+                            <h6 class="mb-0 fw-bold">Envío Express</h6>
+                            <small class="text-muted">En 24/48h en tu casa</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 border-start border-end">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="bi bi-shield-check fs-1 text-primary me-3"></i>
+                        <div class="text-start">
+                            <h6 class="mb-0 fw-bold">100% Original</h6>
+                            <small class="text-muted">Productos precintados</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="bi bi-patch-check fs-1 text-primary me-3"></i>
+                        <div class="text-start">
+                            <h6 class="mb-0 fw-bold">Garantía Hoenn</h6>
+                            <small class="text-muted">Expertos en TCG</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="col">
-            <div class="card h-100 shadow-sm border-info">
-                <img th:src="@{/imagenes/categorias/Cartas.jpg}" class="card-img-top p-3" alt="Mudkip Shiny" style="height: 250px; object-fit: contain;">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Mudkip Brillante</h5>
-                    <p class="card-text text-muted">Expansión: Tesoros del Pantano</p>
-                    <h4 class="text-primary fw-bold">29,99€</h4>
-                    <button class="btn btn-mud-tree w-100">Añadir al carrito</button>
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Explora las Colecciones</h2>
+                <div class="mx-auto bg-primary" style="height: 4px; width: 60px;"></div>
+            </div>
+            <div class="row g-4">
+                <div class="col-6 col-md-3" th:each="cat, iter : ${categorias}" th:if="${iter.index < 4}">
+                    <a th:href="@{/categorias/{id}(id=${cat.id})}" class="text-decoration-none">
+                        <div class="card h-100 border-0 shadow-sm text-center p-4 category-card">
+                            <div class="category-icon mx-auto mb-3">
+                                <i class="bi bi-layers-fill fs-1 text-primary"></i>
+                            </div>
+                            <h5 class="text-dark fw-bold mb-0" th:text="${cat.nombre}">Categoría</h5>
+                            <small class="text-muted" th:text="${#lists.size(cat.productos)} + ' Productos'"></small>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <img th:src="@{/imagenes/categorias/Sobres.jpg}" class="card-img-top p-3" alt="Sobre TCG" style="height: 250px; object-fit: contain;">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Sobre Escarlata y Púrpura</h5>
-                    <p class="card-text text-muted">10 Cartas adicionales</p>
-                    <h4 class="text-dark fw-bold">4,50€</h4>
-                    <button class="btn btn-mud-tree w-100">Añadir al carrito</button>
+    <section class="bg-light py-5">
+        <div class="container" id="productos">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <h2 class="fw-bold mb-0">Novedades Destacadas</h2>
+                    <p class="text-muted mb-0">Lo más buscado por los entrenadores esta semana.</p>
+                </div>
+                <a th:href="@{/productos}" class="btn btn-primary">Ver Catálogo Completo</a>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                <div class="col" th:each="p, iter : ${novedades}" th:if="${iter.index < 4}">
+                    <div class="card h-100 shadow-sm border-0 position-relative card-hover overflow-hidden">
+                        <div th:if="${p.descuento > 0}" class="badge bg-danger position-absolute top-0 end-0 m-3 shadow" style="z-index: 2;">
+                            <i class="bi bi-lightning-fill"></i> <span th:text="${'-' + p.descuento + '%'}"></span>
+                        </div>
+
+                        <img th:src="${p.imagen != null && !p.imagen.isEmpty()} ? @{${p.imagen}} : @{/imagenes/image_not_found.jpg}"
+                             class="card-img-top p-4" style="height: 220px; object-fit: contain;" th:alt="${p.nombre}">
+
+                        <div class="card-body d-flex flex-column text-center">
+                            <small class="text-primary text-uppercase fw-bold tracking-widest" style="font-size: 0.7rem;" th:text="${p.marca.nombre}">MARCA</small>
+                            <h5 class="card-title fw-bold my-2">
+                                <a th:href="@{/productos/{id}/{slug}(id=${p.id}, slug=${p.nombre})}"
+                                   th:text="${p.nombre}" class="text-decoration-none text-dark stretched-link"></a>
+                            </h5>
+                            <div class="mt-auto">
+                                <div th:if="${p.descuento > 0}">
+                                    <small class="text-muted text-decoration-line-through" th:text="${p.precio + '€'}"></small>
+                                </div>
+                                <span class="h4 fw-bold text-dark"
+                                      th:text="${#numbers.formatDecimal(p.descuento > 0 ? (p.precio * (1 - p.descuento/100.0)) : p.precio, 1, 2) + '€'}">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-    </div>
+    <section class="py-5 bg-white">
+        <div class="container">
+            <h5 class="text-center text-muted text-uppercase mb-4 fw-bold" style="letter-spacing: 2px;">Marcas Oficiales</h5>
+            <div class="row justify-content-center align-items-center g-5 opacity-75 grayscale-filter">
+                <div class="col-4 col-md-2 text-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg" class="img-fluid" style="max-height: 40px;" alt="Pokemon">
+                </div>
+                <div class="col-4 col-md-2 text-center text-dark fw-bold h4 mb-0">Nintendo</div>
+                <div class="col-4 col-md-2 text-center text-dark fw-bold h4 mb-0">GAME FREAK</div>
+                <div class="col-4 col-md-2 text-center text-dark fw-bold h4 mb-0">Creatures</div>
+            </div>
+        </div>
+    </section>
 </main>
 
 <footer th:replace="~{layout/base :: footer}"></footer>
+
+<style>
+    /* Estilos personalizados para la Home */
+    .tracking-tight { letter-spacing: -1px; }
+    .tracking-widest { letter-spacing: 1.5px; }
+
+    .card-hover {
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15) !important;
+    }
+
+    .category-card {
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+    .category-card:hover {
+        background: white;
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+    }
+
+    .category-icon {
+        transition: transform 0.3s ease;
+    }
+    .category-card:hover .category-icon {
+        transform: rotate(-10deg) scale(1.1);
+    }
+
+    .grayscale-filter {
+        filter: grayscale(100%);
+        transition: filter 0.3s ease;
+    }
+    .grayscale-filter:hover {
+        filter: grayscale(0%);
+    }
+
+    /* Colores personalizados si no están en tu CSS base */
+    .text-primary { color: #2a75bb !important; }
+    .bg-primary { background-color: #2a75bb !important; }
+</style>
 
 </body>
 </html>
