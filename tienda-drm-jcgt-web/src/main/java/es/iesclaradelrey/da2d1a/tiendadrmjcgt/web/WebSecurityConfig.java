@@ -32,10 +32,9 @@ public class WebSecurityConfig {
 
                 // Define qué rutas requieren autenticación y cuáles son públicas
                 .authorizeHttpRequests(auth -> auth
-                        // Restringe el acceso a la consola H2 y al panel de administración
-                        .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).authenticated()
-                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).authenticated()
-                        // El resto de la tienda es de acceso libre
+                        .requestMatchers("/register").anonymous() // Solo usuarios NO autenticados
+                        .requestMatchers("/h2-console/**").authenticated()
+                        .requestMatchers("/admin/**").authenticated()
                         .anyRequest().permitAll()
                 )
 
