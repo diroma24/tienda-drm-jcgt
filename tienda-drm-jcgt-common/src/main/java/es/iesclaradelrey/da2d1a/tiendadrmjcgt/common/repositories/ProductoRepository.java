@@ -2,8 +2,11 @@ package es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.repositories;
 
 import es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.entities.Categoria;
 import es.iesclaradelrey.da2d1a.tiendadrmjcgt.common.entities.Producto;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Interfaz de acceso a datos para la entidad Producto.
@@ -15,5 +18,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
-    // Espacio reservado para la definición de métodos de consulta derivados (Query Methods)
+    List<Producto> findByCategoriasId(Long categoryId, Sort sort);
 }
