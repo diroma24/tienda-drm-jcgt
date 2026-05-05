@@ -52,3 +52,8 @@ INSERT INTO productos_categorias (id_producto, id_categoria) VALUES (11, 3), (12
 INSERT INTO productos_categorias (id_producto, id_categoria) VALUES (16, 4), (17, 4), (18, 4), (19, 4);
 INSERT INTO productos_categorias (id_producto, id_categoria) VALUES (18, 1); -- Mudkip en Cartas y Sobres (Punto 5)
 -- El ID 20 (Charizard) NO tiene categoría (Punto 3: Producto sin categoría)
+
+-- Insertar usuario administrador inicial
+-- Password: Password (BCrypt, cost 12)
+INSERT INTO usuarios (username, password, nombre, apellidos, email, activo, fecha_registro)
+VALUES ('admin', '$2a$12$Jsh18.x43XF79V2eICH7LO.UsVGT9fKlJJu5ig4Jci00uPgScUQfO', 'Admin', 'Sistema', 'admin@tienda.com', true, CURRENT_TIMESTAMP);

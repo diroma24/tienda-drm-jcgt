@@ -9,7 +9,10 @@ import java.util.Optional;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
+
+    @Autowired
     private UsuarioRepository usuarioRepository;
+
     @Override
     public Optional<Usuario> findByUsername(String username) {
         return usuarioRepository.findByUsername(username);
