@@ -5,13 +5,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.5</version>
+        <version>3.3.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <packaging>pom</packaging>
     <modules>
         <module>tienda-drm-jcgt-common</module>
         <module>tienda-drm-jcgt-web</module>
+        <module>tienda-drm-jcgt-security</module>
     </modules>
     <groupId>es.iesclaradelrey.da2d1a.tienda-drm-jcgt</groupId>
     <artifactId>tienda-drm-jcgt-parent</artifactId>
@@ -44,12 +45,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>es.iesclaradelrey.da2d1a.tienda-drm-jcgt</groupId>
-            <artifactId>tienda-drm-jcgt-common</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
