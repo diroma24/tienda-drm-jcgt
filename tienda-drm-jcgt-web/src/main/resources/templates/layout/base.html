@@ -33,7 +33,39 @@
                     </a>
                 </li>
 
+                <!-- SECCIÓN DE CARRITO (Existente) -->
                 <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3" href="#">Carrito (0)</a></li>
+
+                <hr class="d-lg-none text-white-50 w-100 my-2"> <!-- Separador visual en móvil -->
+
+                <!-- 1. SI EL USUARIO NO ESTÁ AUTENTICADO -->
+                <th:block sec:authorize="isAnonymous()">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/login}">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary btn-sm ms-lg-2" th:href="@{/register}">Registrarse</a>
+                    </li>
+                </th:block>
+
+                <!-- 2. SI EL USUARIO ESTÁ AUTENTICADO -->
+                <th:block sec:authorize="isAuthenticated()">
+                    <li class="nav-item ms-lg-3">
+                        <span class="navbar-text text-white me-2">
+                            Hola, <strong th:text="${#authentication.name}">Usuario</strong>
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <!-- Formulario POST para Logout (Obligatorio por CSRF) -->
+                        <form th:action="@{/logout}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-link nav-link"
+                                    style="display: inline; padding: 0; border: none; vertical-align: baseline;">
+                                Cerrar Sesión
+                            </button>
+                        </form>
+                    </li>
+                </th:block>
+
             </ul>
         </div>
     </div>
