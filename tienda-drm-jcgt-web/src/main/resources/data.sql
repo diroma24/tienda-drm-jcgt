@@ -53,7 +53,23 @@ INSERT INTO productos_categorias (id_producto, id_categoria) VALUES (16, 4), (17
 INSERT INTO productos_categorias (id_producto, id_categoria) VALUES (18, 1); -- Mudkip en Cartas y Sobres (Punto 5)
 -- El ID 20 (Charizard) NO tiene categoría (Punto 3: Producto sin categoría)
 
--- Insertar usuario administrador inicial
--- Password: Password (BCrypt, cost 12)
-INSERT INTO usuarios (username, password, nombre, apellidos, email, activo, fecha_registro)
-VALUES ('admin', '$2a$12$Jsh18.x43XF79V2eICH7LO.UsVGT9fKlJJu5ig4Jci00uPgScUQfO', 'Admin', 'Sistema', 'admin@tienda.com', true, CURRENT_TIMESTAMP);
+-- 1. CREACIÓN DE ROLES (Deben existir antes de poder asignarse)
+INSERT INTO roles (id, descripcion) VALUES ('USER', 'Usuario normal');
+INSERT INTO roles (id, descripcion) VALUES ('ADMIN', 'Administrador');
+
+-- 2. INSERTAR USUARIOS
+-- Usuario: admin | Password: Password
+INSERT INTO usuarios (id, username, password, nombre, apellidos, email, activo, fecha_registro)
+VALUES (1, 'admin', '$2a$12$bh8WT8.41jshB8Ks24wveeF.ZsNuK1JJCTdKVCe0jxQUA.G/Cwj3a', 'Admin', 'Sistema', 'admin@tienda.com', true, CURRENT_TIMESTAMP);
+
+-- Usuario: user | Password: Password
+INSERT INTO usuarios (id, username, password, nombre, apellidos, email, activo, fecha_registro)
+VALUES (2, 'user', '$2a$12$bh8WT8.41jshB8Ks24wveeF.ZsNuK1JJCTdKVCe0jxQUA.G/Cwj3a', 'User', 'Normal', 'user@tienda.com', true, CURRENT_TIMESTAMP);
+
+-- 3. ASIGNACIÓN DE ROLES (Tabla intermedia)
+-- admin (ID 1) tiene los roles ADMIN y USER
+INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES (1, 'ADMIN');
+INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES (1, 'USER');
+
+-- user (ID 2) solo tiene el rol USER
+INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES (2, 'USER');
