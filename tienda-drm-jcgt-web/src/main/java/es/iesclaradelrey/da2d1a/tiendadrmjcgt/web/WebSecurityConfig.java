@@ -7,51 +7,46 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-/**
- * Configuración central de seguridad web para la aplicación.
- * Define las reglas de acceso, políticas de frames y gestión de autenticación.
- */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    /**
-     * Define la cadena de filtros de seguridad (Security Filter Chain).
-     *
-     * @param http Objeto para configurar la seguridad basada en peticiones HTTP.
-     * @return El filtro de seguridad construido.
-     * @throws Exception Si ocurre un error durante la configuración.
-     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // Permite el uso de frames solo si el origen es el mismo (necesario para la consola H2)
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin())
                 )
 
-                // Define qué rutas requieren autenticación y cuáles son públicas
+                // 1. REGLAS DE AUTORIZACIÓN
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register", "/login", "/css/**", "/js/**").permitAll()
-                        // Solo usuarios con el rol ADMIN pueden acceder a la administración
+                        .requestMatchers("/register", "/login", "/css/**", "/js/**", "/img/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        // Cualquier usuario autenticado (USER o ADMIN) puede ver su perfil
                         .requestMatchers("/users/profile/**").authenticated()
                         .anyRequest().permitAll()
-
                 )
 
-                // Desactiva la protección CSRF específicamente para H2 para evitar bloqueos en su consola
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
                 )
 
-                // Habilita el formulario de login estándar de Spring Security
+                // 2. PERSONALIZACIÓN DEL LOGIN (Punto 3.3)
                 .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
 
-                // Desactiva la autenticación HTTP Basic
+                // 3. PERSONALIZACIÓN DEL LOGOUT (Punto 3.4)
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/") // Redirige a la página inicial
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                )
+
                 .httpBasic(basic -> basic.disable());
 
         return http.build();
