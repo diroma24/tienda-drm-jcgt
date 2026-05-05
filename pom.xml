@@ -13,6 +13,7 @@
         <module>tienda-drm-jcgt-common</module>
         <module>tienda-drm-jcgt-web</module>
         <module>tienda-drm-jcgt-security</module>
+        <module>tienda-drm-jcgt-api</module>
     </modules>
     <groupId>es.iesclaradelrey.da2d1a.tienda-drm-jcgt</groupId>
     <artifactId>tienda-drm-jcgt-parent</artifactId>
