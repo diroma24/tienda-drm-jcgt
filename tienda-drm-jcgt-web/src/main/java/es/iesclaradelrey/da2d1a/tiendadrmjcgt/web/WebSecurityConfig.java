@@ -32,10 +32,13 @@ public class WebSecurityConfig {
 
                 // Define qué rutas requieren autenticación y cuáles son públicas
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register").anonymous() // Solo usuarios NO autenticados
-                        .requestMatchers("/h2-console/**").authenticated()
-                        .requestMatchers("/admin/**").authenticated()
+                        .requestMatchers("/register", "/login", "/css/**", "/js/**").permitAll()
+                        // Solo usuarios con el rol ADMIN pueden acceder a la administración
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        // Cualquier usuario autenticado (USER o ADMIN) puede ver su perfil
+                        .requestMatchers("/users/profile/**").authenticated()
                         .anyRequest().permitAll()
+
                 )
 
                 // Desactiva la protección CSRF específicamente para H2 para evitar bloqueos en su consola
