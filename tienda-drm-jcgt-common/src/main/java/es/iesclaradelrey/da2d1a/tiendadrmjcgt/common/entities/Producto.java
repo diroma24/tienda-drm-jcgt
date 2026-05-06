@@ -64,6 +64,9 @@ public class Producto {
     @Column(nullable = false)
     private Integer descuento;
 
+    @Column(nullable = false)
+    private Integer stock;
+
     /**
      * Relación con la marca: cada producto pertenece obligatoriamente a un fabricante.
      */
